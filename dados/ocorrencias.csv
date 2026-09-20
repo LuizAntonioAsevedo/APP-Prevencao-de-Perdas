@@ -1,0 +1,19 @@
+id_ocorrencia,id_remessa,data,tipo_ocorrencia,rota,transportadora,valor_perda,status,descricao
+O0001,R0003,2026-08-02,EXTRAVIO,RT003,TransLog,2300.00,EM_INVESTIGACAO,Remessa não localizada após transferência
+O0002,R0006,2026-08-03,AVARIA,RT002,RapLog,450.00,CONCLUIDO,Produto recebido com embalagem danificada
+O0003,R0008,2026-08-04,DIVERGENCIA,RT004,RapLog,680.00,EM_INVESTIGACAO,Quantidade recebida diferente da quantidade expedida
+O0004,R0010,2026-08-05,EXTRAVIO,RT002,RapLog,2100.00,EM_INVESTIGACAO,Remessa não localizada no processo de entrega
+O0005,R0011,2026-08-06,AVARIA,RT003,TransLog,900.00,CONCLUIDO,Produto danificado durante transporte
+O0006,R0014,2026-08-07,FURTO,RT002,RapLog,2750.00,EM_INVESTIGACAO,Indício de subtração de mercadoria
+O0007,R0015,2026-08-08,DEVOLUCAO,RT003,TransLog,320.00,CONCLUIDO,Pedido devolvido pelo destinatário
+O0008,R0016,2026-08-08,EXTRAVIO,RT004,RapLog,3400.00,EM_INVESTIGACAO,Remessa não localizada após transferência
+O0009,R0018,2026-08-09,DIVERGENCIA,RT002,RapLog,520.00,EM_INVESTIGACAO,Divergência identificada na conferência de recebimento
+O0010,R0019,2026-08-10,AVARIA,RT003,TransLog,750.00,CONCLUIDO,Produto recebido com avaria
+O0011,R0021,2026-08-11,EXTRAVIO,RT001,TransLog,2500.00,EM_INVESTIGACAO,Remessa não localizada no fluxo operacional
+O0012,R0022,2026-08-11,DEVOLUCAO,RT002,RapLog,280.00,CONCLUIDO,Pedido devolvido por recusa do destinatário
+O0013,R0023,2026-08-12,FURTO,RT003,TransLog,3700.00,EM_INVESTIGACAO,Indício de subtração de mercadoria
+O0014,R0024,2026-08-12,AVARIA,RT004,RapLog,600.00,CONCLUIDO,Produto danificado durante transporte
+O0015,R0026,2026-08-13,EXTRAVIO,RT002,RapLog,4100.00,EM_INVESTIGACAO,Remessa não localizada após transferência
+O0016,R0027,2026-08-14,DIVERGENCIA,RT003,TransLog,410.00,EM_INVESTIGACAO,Divergência entre documentação e quantidade física
+O0017,R0028,2026-08-14,AVARIA,RT004,RapLog,850.00,CONCLUIDO,Embalagem violada e produto danificado
+O0018,R0029,2026-08-15,EXTRAVIO,RT001,TransLog,1750.00,EM_INVESTIGACAO,Remessa não localizada no processo operacional

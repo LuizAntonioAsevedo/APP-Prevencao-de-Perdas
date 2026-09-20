@@ -1,0 +1,121 @@
+from collections import Counter
+
+from app.tools.dados import obter_ocorrencias
+
+
+def carregar_ocorrencias():
+    """
+    Carrega as ocorrências utilizando a Tool de dados.
+    """
+
+    registros = obter_ocorrencias()
+
+    ocorrencias = []
+
+    for registro in registros:
+        ocorrencias.append({
+            "id_ocorrencia": registro[0],
+            "id_remessa": registro[1],
+            "data": registro[2],
+            "tipo_ocorrencia": registro[3],
+            "rota": registro[4],
+            "transportadora": registro[5],
+            "valor_perda": registro[6],
+            "status": registro[7],
+            "descricao": registro[8],
+        })
+
+    return ocorrencias
+
+
+def analisar_perdas():
+    """
+    Analisa as perdas utilizando os dados fornecidos pela Tool.
+    """
+
+    ocorrencias = carregar_ocorrencias()
+
+    total_ocorrencias = len(ocorrencias)
+
+    valor_total = sum(
+        float(ocorrencia["valor_perda"])
+        for ocorrencia in ocorrencias
+    )
+
+    ocorrencias_por_tipo = Counter(
+        ocorrencia["tipo_ocorrencia"]
+        for ocorrencia in ocorrencias
+    )
+
+    perdas_por_tipo = Counter()
+
+    for ocorrencia in ocorrencias:
+        tipo = ocorrencia["tipo_ocorrencia"]
+        valor = float(ocorrencia["valor_perda"])
+
+        perdas_por_tipo[tipo] += valor
+
+    ocorrencias_em_investigacao = sum(
+        1
+        for ocorrencia in ocorrencias
+        if ocorrencia["status"] == "EM_INVESTIGACAO"
+    )
+
+    tipo_mais_frequente = ocorrencias_por_tipo.most_common(1)[0]
+
+    tipo_maior_perda = max(
+        perdas_por_tipo.items(),
+        key=lambda item: item[1]
+    )
+
+    return {
+        "total_ocorrencias": total_ocorrencias,
+        "valor_total": valor_total,
+        "ocorrencias_por_tipo": ocorrencias_por_tipo,
+        "perdas_por_tipo": perdas_por_tipo,
+        "ocorrencias_em_investigacao": ocorrencias_em_investigacao,
+        "tipo_mais_frequente": tipo_mais_frequente,
+        "tipo_maior_perda": tipo_maior_perda,
+    }
+
+
+if __name__ == "__main__":
+    resultado = analisar_perdas()
+
+    print("=== SKILL: ANALISAR PERDAS ===")
+    print()
+
+    print(f"Total de ocorrências: {resultado['total_ocorrencias']}")
+    print(
+        f"Valor total das perdas: "
+        f"R$ {resultado['valor_total']:,.2f}"
+    )
+    print(
+        f"Ocorrências em investigação: "
+        f"{resultado['ocorrencias_em_investigacao']}"
+    )
+
+    print()
+    print("Ocorrências por tipo:")
+
+    for tipo, quantidade in resultado["ocorrencias_por_tipo"].items():
+        print(f"- {tipo}: {quantidade}")
+
+    print()
+    print("Valor das perdas por tipo:")
+
+    for tipo, valor in resultado["perdas_por_tipo"].items():
+        print(f"- {tipo}: R$ {valor:,.2f}")
+
+    print()
+    print(
+        f"Tipo mais frequente: "
+        f"{resultado['tipo_mais_frequente'][0]} "
+        f"({resultado['tipo_mais_frequente'][1]} ocorrências)"
+    )
+
+    print(
+        f"Tipo com maior valor de perda: "
+        f"{resultado['tipo_maior_perda'][0]} "
+        f"(R$ {resultado['tipo_maior_perda'][1]:,.2f})"
+    )

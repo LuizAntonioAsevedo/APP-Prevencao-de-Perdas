@@ -1,0 +1,5 @@
+id_rota,origem,destino,distancia_km,regiao
+RT001,Guarulhos,Campinas,98,Sudeste
+RT002,Guarulhos,Santos,85,Sudeste
+RT003,Guarulhos,Ribeirao Preto,315,Sudeste
+RT004,Guarulhos,Sao Jose dos Campos,115,Sudeste

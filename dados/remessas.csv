@@ -1,0 +1,31 @@
+id_remessa,data,origem,destino,rota,transportadora,valor_mercadoria,status
+R0001,2026-08-01,Guarulhos,Campinas,RT001,TransLog,850.00,ENTREGUE
+R0002,2026-08-01,Guarulhos,Santos,RT002,RapLog,1250.00,ENTREGUE
+R0003,2026-08-02,Guarulhos,Ribeirao Preto,RT003,TransLog,2300.00,ENTREGUE
+R0004,2026-08-02,Guarulhos,Sao Jose dos Campos,RT004,RapLog,680.00,ENTREGUE
+R0005,2026-08-03,Guarulhos,Campinas,RT001,TransLog,1450.00,ENTREGUE
+R0006,2026-08-03,Guarulhos,Santos,RT002,RapLog,3200.00,ENTREGUE
+R0007,2026-08-04,Guarulhos,Ribeirao Preto,RT003,TransLog,980.00,ENTREGUE
+R0008,2026-08-04,Guarulhos,Sao Jose dos Campos,RT004,RapLog,1750.00,ENTREGUE
+R0009,2026-08-05,Guarulhos,Campinas,RT001,TransLog,560.00,ENTREGUE
+R0010,2026-08-05,Guarulhos,Santos,RT002,RapLog,2100.00,ENTREGUE
+R0011,2026-08-06,Guarulhos,Ribeirao Preto,RT003,TransLog,4500.00,ENTREGUE
+R0012,2026-08-06,Guarulhos,Sao Jose dos Campos,RT004,RapLog,920.00,ENTREGUE
+R0013,2026-08-07,Guarulhos,Campinas,RT001,TransLog,1300.00,ENTREGUE
+R0014,2026-08-07,Guarulhos,Santos,RT002,RapLog,2750.00,ENTREGUE
+R0015,2026-08-08,Guarulhos,Ribeirao Preto,RT003,TransLog,1600.00,ENTREGUE
+R0016,2026-08-08,Guarulhos,Sao Jose dos Campos,RT004,RapLog,3400.00,ENTREGUE
+R0017,2026-08-09,Guarulhos,Campinas,RT001,TransLog,720.00,ENTREGUE
+R0018,2026-08-09,Guarulhos,Santos,RT002,RapLog,1850.00,ENTREGUE
+R0019,2026-08-10,Guarulhos,Ribeirao Preto,RT003,TransLog,2950.00,ENTREGUE
+R0020,2026-08-10,Guarulhos,Sao Jose dos Campos,RT004,RapLog,1100.00,ENTREGUE
+R0021,2026-08-11,Guarulhos,Campinas,RT001,TransLog,2500.00,ENTREGUE
+R0022,2026-08-11,Guarulhos,Santos,RT002,RapLog,890.00,ENTREGUE
+R0023,2026-08-12,Guarulhos,Ribeirao Preto,RT003,TransLog,3700.00,ENTREGUE
+R0024,2026-08-12,Guarulhos,Sao Jose dos Campos,RT004,RapLog,1450.00,ENTREGUE
+R0025,2026-08-13,Guarulhos,Campinas,RT001,TransLog,990.00,ENTREGUE
+R0026,2026-08-13,Guarulhos,Santos,RT002,RapLog,4100.00,ENTREGUE
+R0027,2026-08-14,Guarulhos,Ribeirao Preto,RT003,TransLog,1250.00,ENTREGUE
+R0028,2026-08-14,Guarulhos,Sao Jose dos Campos,RT004,RapLog,2300.00,ENTREGUE
+R0029,2026-08-15,Guarulhos,Campinas,RT001,TransLog,1750.00,ENTREGUE
+R0030,2026-08-15,Guarulhos,Santos,RT002,RapLog,2850.00,ENTREGUE

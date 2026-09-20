@@ -1,0 +1,3 @@
+id_transportadora,nome,tipo_operacao,regiao
+T001,TransLog,Transporte Rodoviario,Sudeste
+T002,RapLog,Transporte Rodoviario,Sudeste
