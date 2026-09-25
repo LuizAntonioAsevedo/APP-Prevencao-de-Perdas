@@ -4,41 +4,49 @@ from app.tools.dados import obter_remessas, obter_ocorrencias
 
 
 def carregar_remessas():
+    """
+    Carrega as remessas utilizando a Tool de dados.
+    """
+
     registros = obter_remessas()
 
     remessas = []
 
     for registro in registros:
         remessas.append({
-            "id_remessa": registro[0],
-            "data": registro[1],
-            "origem": registro[2],
-            "destino": registro[3],
-            "rota": registro[4],
-            "transportadora": registro[5],
-            "valor_mercadoria": registro[6],
-            "status": registro[7],
+            "id_remessa": registro["id_remessa"],
+            "data": registro["data"],
+            "origem": registro["origem"],
+            "destino": registro["destino"],
+            "rota": registro["rota"],
+            "transportadora": registro["transportadora"],
+            "valor_mercadoria": registro["valor_mercadoria"],
+            "status": registro["status"],
         })
 
     return remessas
 
 
 def carregar_ocorrencias():
+    """
+    Carrega as ocorrências utilizando a Tool de dados.
+    """
+
     registros = obter_ocorrencias()
 
     ocorrencias = []
 
     for registro in registros:
         ocorrencias.append({
-            "id_ocorrencia": registro[0],
-            "id_remessa": registro[1],
-            "data": registro[2],
-            "tipo_ocorrencia": registro[3],
-            "rota": registro[4],
-            "transportadora": registro[5],
-            "valor_perda": registro[6],
-            "status": registro[7],
-            "descricao": registro[8],
+            "id_ocorrencia": registro["id_ocorrencia"],
+            "id_remessa": registro["id_remessa"],
+            "data": registro["data"],
+            "tipo_ocorrencia": registro["tipo_ocorrencia"],
+            "rota": registro["rota"],
+            "transportadora": registro["transportadora"],
+            "valor_perda": registro["valor_perda"],
+            "status": registro["status"],
+            "descricao": registro["descricao"],
         })
 
     return ocorrencias
@@ -70,6 +78,11 @@ def classificar_risco(indice_ocorrencia, valor_perdas):
 
 
 def priorizar_riscos():
+    """
+    Prioriza os riscos das rotas utilizando os dados
+    fornecidos pelas Tools.
+    """
+
     remessas = carregar_remessas()
     ocorrencias = carregar_ocorrencias()
 

@@ -1,4 +1,3 @@
-
 def interpretar_pergunta(pergunta):
     """
     Interpreta a pergunta do usuário e identifica:
@@ -71,6 +70,8 @@ def interpretar_pergunta(pergunta):
     ]
 
     palavras_priorizacao = [
+        "risco",
+        "riscos",
         "maior risco",
         "maiores riscos",
         "mais crítico",

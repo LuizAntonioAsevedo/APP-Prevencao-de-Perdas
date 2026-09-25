@@ -8,6 +8,7 @@ from app.database.conexao import conectar
 def consultar_remessas():
     """
     Retorna todas as remessas cadastradas no banco.
+    Os resultados são convertidos para dicionários.
     """
 
     conexao = conectar()
@@ -27,7 +28,11 @@ def consultar_remessas():
         ORDER BY id_remessa
     """)
 
-    resultados = cursor.fetchall()
+    colunas = [descricao[0] for descricao in cursor.description]
+    resultados = [
+        dict(zip(colunas, linha))
+        for linha in cursor.fetchall()
+    ]
 
     conexao.close()
 
@@ -41,6 +46,7 @@ def consultar_remessas():
 def consultar_ocorrencias():
     """
     Retorna todas as ocorrências cadastradas no banco.
+    Os resultados são convertidos para dicionários.
     """
 
     conexao = conectar()
@@ -61,7 +67,11 @@ def consultar_ocorrencias():
         ORDER BY id_ocorrencia
     """)
 
-    resultados = cursor.fetchall()
+    colunas = [descricao[0] for descricao in cursor.description]
+    resultados = [
+        dict(zip(colunas, linha))
+        for linha in cursor.fetchall()
+    ]
 
     conexao.close()
 
@@ -75,6 +85,7 @@ def consultar_ocorrencias():
 def consultar_rotas():
     """
     Retorna todas as rotas cadastradas no banco.
+    Os resultados são convertidos para dicionários.
     """
 
     conexao = conectar()
@@ -91,7 +102,11 @@ def consultar_rotas():
         ORDER BY id_rota
     """)
 
-    resultados = cursor.fetchall()
+    colunas = [descricao[0] for descricao in cursor.description]
+    resultados = [
+        dict(zip(colunas, linha))
+        for linha in cursor.fetchall()
+    ]
 
     conexao.close()
 
@@ -105,6 +120,7 @@ def consultar_rotas():
 def consultar_transportadoras():
     """
     Retorna todas as transportadoras cadastradas no banco.
+    Os resultados são convertidos para dicionários.
     """
 
     conexao = conectar()
@@ -120,7 +136,11 @@ def consultar_transportadoras():
         ORDER BY id_transportadora
     """)
 
-    resultados = cursor.fetchall()
+    colunas = [descricao[0] for descricao in cursor.description]
+    resultados = [
+        dict(zip(colunas, linha))
+        for linha in cursor.fetchall()
+    ]
 
     conexao.close()
 
