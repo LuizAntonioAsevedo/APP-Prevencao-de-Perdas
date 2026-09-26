@@ -1,6 +1,6 @@
 # 🤖 Agente Inteligente de Prevenção de Perdas
 
-Sistema desenvolvido em **Python** para apoiar processos de **Prevenção de Perdas em operações de e-commerce e logística**, utilizando análise de dados, interpretação de perguntas em linguagem natural e uma arquitetura modular de agente inteligente.
+Sistema desenvolvido em **Python** para apoiar processos de **Prevenção de Perdas em operações de e-commerce e logística**, utilizando análise de dados, interpretação de perguntas em linguagem natural, Skills especializadas, Tools, MCP, banco de dados SQLite e interface web.
 
 > **Projeto de portfólio — os dados utilizados são fictícios e destinados exclusivamente para fins educacionais e demonstrativos.**
 
@@ -8,9 +8,9 @@ Sistema desenvolvido em **Python** para apoiar processos de **Prevenção de Per
 
 ## 📌 Sobre o projeto
 
-O **Agente Inteligente de Prevenção de Perdas** foi criado para demonstrar como conceitos de **Inteligência Artificial, análise de dados, automação e arquitetura de agentes** podem ser aplicados a problemas relacionados a operações logísticas.
+O **Agente Inteligente de Prevenção de Perdas** foi desenvolvido para demonstrar como conceitos de **Inteligência Artificial, análise de dados, automação e arquitetura de agentes** podem ser aplicados a problemas relacionados a operações logísticas e e-commerce.
 
-O sistema trabalha com dados fictícios de:
+O sistema trabalha com dados de:
 
 * Remessas;
 * Ocorrências;
@@ -19,22 +19,29 @@ O sistema trabalha com dados fictícios de:
 * Valores de perdas;
 * Status das ocorrências.
 
-A partir desses dados, o agente consegue interpretar perguntas em linguagem natural, identificar a intenção do usuário e direcionar a solicitação para a **Skill** responsável pela análise.
+O agente interpreta perguntas em linguagem natural, identifica a intenção e a entidade envolvida e direciona a solicitação para a Skill responsável pela análise.
 
 Exemplos de perguntas:
 
-* "Onde estão concentradas as perdas?"
-* "Qual rota merece mais atenção?"
-* "Qual transportadora apresenta maior risco?"
-* "Existe algum comportamento anormal?"
-* "Qual deveria ser minha prioridade de investigação?"
-* "Faça um relatório completo."
+```text
+Quais são as perdas?
+
+Quais são as rotas?
+
+Quais são as transportadoras?
+
+Quais são as anomalias?
+
+Quais são os riscos?
+
+Faça um relatório completo.
+```
 
 ---
 
 # 🎯 Finalidade
 
-O principal objetivo do projeto é desenvolver uma solução que possa **apoiar profissionais de Prevenção de Perdas na identificação de pontos de atenção e priorização de investigações**.
+O principal objetivo do projeto é desenvolver uma solução capaz de **apoiar profissionais de Prevenção de Perdas na identificação de pontos de atenção, análise de indicadores e priorização de investigações**.
 
 O agente não substitui a análise humana.
 
@@ -43,13 +50,15 @@ Sua função é:
 1. Receber uma pergunta;
 2. Interpretar a intenção do usuário;
 3. Identificar a entidade envolvida;
-4. Direcionar a solicitação para a Skill adequada;
-5. Utilizar as Tools responsáveis pelo acesso aos dados;
-6. Analisar os indicadores disponíveis;
+4. Consultar os dados através da arquitetura MCP;
+5. Direcionar os dados para a Skill adequada;
+6. Executar a análise;
 7. Apresentar os resultados;
 8. Apoiar a tomada de decisão humana.
 
-## ⚠️ Regra de controle
+---
+
+# ⚠️ Regra de controle
 
 Os indicadores apresentados pelo sistema representam **pontos de atenção, anomalias ou riscos identificados**.
 
@@ -57,89 +66,117 @@ Uma anomalia não constitui, isoladamente, evidência de fraude ou irregularidad
 
 Decisões críticas devem ser avaliadas e validadas pela equipe responsável.
 
+```text
+ANOMALIA ≠ FRAUDE
+```
+
 ---
 
 # 🧠 Arquitetura
 
-A arquitetura atual utiliza uma separação entre **Agente, Skills, Tools e acesso ao banco de dados**.
+A arquitetura evoluiu progressivamente até a V5.6.
 
-O fluxo principal é:
+O fluxo atual utiliza:
 
 ```text
-                         USUÁRIO
-                            │
-                            ▼
-                  PERGUNTA EM LINGUAGEM
-                       NATURAL
-                            │
-                            ▼
-                     INTERPRETADOR
-                  app/interpretador.py
-                            │
-                     ┌──────┴──────┐
-                     │             │
-                  INTENÇÃO      ENTIDADE
-                     │             │
-                     └──────┬──────┘
-                            ▼
-                         AGENTE
-                    app/agente.py
-                            │
-                            ▼
-                         SKILL
-                            │
-                            ▼
-                          TOOL
-                            │
-                            ▼
-                    DATABASE / CONSULTAS
-                            │
-                            ▼
-                         SQLite
-                            │
-                            ▼
-                         DADOS
-                            │
-                            ▼
-                       RESULTADO
-                            │
-                            ▼
-                    DECISÃO HUMANA
+USUÁRIO
+   │
+   ▼
+INTERFACE
+   │
+   ▼
+AGENTE
+   │
+   ▼
+INTERPRETADOR
+   │
+   ▼
+MCP CLIENT
+   │
+   ▼
+MCP SERVER
+   │
+   ▼
+TOOLS
+   │
+   ▼
+DADOS / SQLITE
+   │
+   ▼
+SKILLS
+   │
+   ▼
+RESULTADO
+   │
+   ▼
+DECISÃO HUMANA
 ```
 
-Essa separação permite que cada camada tenha uma responsabilidade específica.
+### Fluxo detalhado
 
-### Agente
+```text
+Pergunta do usuário
+        │
+        ▼
+app/interpretador.py
+        │
+        ├── intenção
+        └── entidade
+        │
+        ▼
+app/agente.py
+        │
+        ▼
+app/mcp/cliente.py
+        │
+        ▼
+app/mcp/servidor.py
+        │
+        ▼
+app/tools/
+        │
+        ▼
+SQLite / dados externos
+        │
+        ▼
+Skills de análise
+        │
+        ▼
+Resultado
+```
 
-Responsável pela interação com o usuário e pela orquestração da execução.
-
-### Interpretador
-
-Identifica a intenção e a entidade presentes na pergunta.
-
-### Skill
-
-Representa uma capacidade especializada do agente.
-
-### Tool
-
-Responsável por executar operações específicas, como obtenção de dados.
-
-### Database
-
-Centraliza o acesso aos dados armazenados no SQLite.
+A arquitetura foi organizada para separar responsabilidades entre as diferentes camadas do sistema.
 
 ---
 
-# 🔎 Interpretação de perguntas
+# 🤖 Agente
 
-O projeto possui um interpretador responsável por separar a interpretação da pergunta da execução da análise.
+Arquivo principal:
+
+```text
+app/agente.py
+```
+
+Responsável pela:
+
+* Orquestração da aplicação;
+* Interpretação da pergunta;
+* Consulta dos dados através do MCP;
+* Direcionamento para as Skills;
+* Formatação dos resultados;
+* Interação com o usuário.
+
+---
+
+# 🔎 Interpretador
 
 Arquivo:
 
 ```text
 app/interpretador.py
 ```
+
+O interpretador separa a compreensão da pergunta da execução da análise.
 
 O fluxo é:
 
@@ -150,29 +187,96 @@ INTENÇÃO
    ↓
 ENTIDADE
    ↓
+AGENTE
+   ↓
 SKILL
-   ↓
-TOOL
-   ↓
-DADOS
 ```
 
-Por exemplo:
+Exemplo:
 
 ```text
 "Qual transportadora apresenta maior risco?"
 ```
 
-é interpretado como:
+Pode ser interpretado como:
 
 ```text
 intenção: priorizar
 entidade: transportadora
 ```
 
-O agente então direciona a solicitação para a análise correspondente.
+O agente utiliza essas informações para executar a análise correspondente.
 
-Essa separação torna a arquitetura mais organizada e facilita futuras evoluções.
+---
+
+# 🔌 MCP — Model Context Protocol
+
+A partir da V5, o projeto passou a utilizar **MCP (Model Context Protocol)** como camada de comunicação entre o Agente e as ferramentas de acesso aos dados.
+
+Na V5.6, o MCP deixou de ser apenas uma estrutura de teste e passou a fazer parte efetivamente do fluxo de execução do Agente.
+
+Arquivos principais:
+
+```text
+app/mcp/
+
+├── __init__.py
+├── servidor.py
+├── cliente.py
+└── testar_cliente.py
+```
+
+### MCP Server
+
+Arquivo:
+
+```text
+app/mcp/servidor.py
+```
+
+O servidor MCP disponibiliza ferramentas para consulta dos dados.
+
+Ferramentas disponíveis:
+
+```text
+testar_mcp()
+
+consultar_ocorrencias()
+
+consultar_remessas()
+
+consultar_rotas()
+
+consultar_transportadoras()
+```
+
+### MCP Client
+
+Arquivo:
+
+```text
+app/mcp/cliente.py
+```
+
+O cliente MCP estabelece a comunicação com o servidor e obtém os conjuntos de dados necessários para o Agente.
+
+O fluxo principal é:
+
+```text
+AGENTE
+   ↓
+MCP CLIENT
+   ↓
+MCP SERVER
+   ↓
+TOOLS
+   ↓
+DADOS
+```
+
+### Resultado da integração
+
+Na V5.6, o Agente foi validado utilizando efetivamente os dados recuperados através do MCP.
 
 ---
 
@@ -238,22 +342,22 @@ As classificações indicam níveis de atenção e não representam, isoladament
 
 Realiza a priorização das rotas de acordo com os indicadores de risco.
 
-As rotas são classificadas em níveis:
+As rotas podem ser classificadas em:
 
 * BAIXO;
 * MÉDIO;
 * ALTO;
 * CRÍTICO.
 
-A classificação considera os critérios definidos na lógica da Skill, combinando frequência das ocorrências e impacto financeiro.
+A classificação considera critérios definidos na lógica da Skill, combinando frequência das ocorrências e impacto financeiro.
 
 ---
 
 ## 6. `gerar_relatorio`
 
-Consolida as principais informações do sistema em um relatório de Prevenção de Perdas.
+Consolida informações do sistema em um relatório de Prevenção de Perdas.
 
-O relatório apresenta:
+O relatório pode apresentar:
 
 * Resumo executivo;
 * Rotas prioritárias;
@@ -266,15 +370,27 @@ O relatório apresenta:
 
 # 🛠️ Tools
 
-A partir da **V3**, o projeto passou a utilizar uma camada específica de Tools.
+A arquitetura possui uma camada específica de Tools.
 
-Arquivo principal:
+Diretório:
 
 ```text
-app/tools/dados.py
+app/tools/
 ```
 
-A Tool de dados disponibiliza funções para obtenção das informações utilizadas pelas Skills:
+Principais componentes:
+
+```text
+dados.py
+ler_csv.py
+validar_csv.py
+normalizar_dados.py
+importar_externo.py
+```
+
+### `dados.py`
+
+Disponibiliza funções para obtenção dos dados utilizados pelas Skills:
 
 ```text
 obter_remessas()
@@ -283,27 +399,44 @@ obter_rotas()
 obter_transportadoras()
 ```
 
-As Skills não precisam acessar diretamente o banco de dados.
+### Tools de dados externos
 
-O fluxo passou a ser:
+O projeto também possui ferramentas para trabalhar com arquivos CSV externos:
 
 ```text
-SKILL
-  ↓
-TOOL
-  ↓
-DATABASE
-  ↓
-SQLITE
+ler_csv()
+validar_csv()
+normalizar_ocorrencias()
+importar_ocorrencias_externas()
 ```
 
-Essa separação reduz o acoplamento entre a lógica de análise e a camada de acesso aos dados.
+O fluxo de dados externos é:
+
+```text
+CSV EXTERNO
+    ↓
+LEITURA
+    ↓
+VALIDAÇÃO
+    ↓
+NORMALIZAÇÃO
+    ↓
+IMPORTAÇÃO
+    ↓
+SQLITE
+    ↓
+MCP
+    ↓
+SKILLS
+```
+
+Essa estrutura permite que o projeto evolua futuramente para fontes de dados externas reais.
 
 ---
 
 # 🗄️ Banco de dados
 
-A partir da **V2**, o projeto passou a utilizar **SQLite** como banco de dados.
+O projeto utiliza **SQLite** como banco de dados relacional.
 
 Banco:
 
@@ -311,7 +444,7 @@ Banco:
 dados/prevencao_perdas.db
 ```
 
-O banco possui as seguintes tabelas:
+Principais tabelas:
 
 ```text
 remessas
@@ -324,6 +457,7 @@ A camada de acesso ao banco está organizada em:
 
 ```text
 app/database/
+
 ├── conexao.py
 ├── criar_banco.py
 ├── importar_dados.py
@@ -331,30 +465,69 @@ app/database/
 └── consultas.py
 ```
 
-### Fluxo de dados
+---
 
-Os dados fictícios inicialmente são mantidos em arquivos CSV e podem ser importados para o banco SQLite.
+# 📥 Dados externos
+
+A partir da V5, foi criada uma estrutura para permitir a entrada de dados externos através de arquivos CSV.
+
+O sistema realiza:
 
 ```text
-CSV
- │
- ▼
-IMPORTAÇÃO
- │
- ▼
+Arquivo CSV
+    ↓
+Leitura
+    ↓
+Validação
+    ↓
+Normalização
+    ↓
+Importação
+    ↓
 SQLite
- │
- ▼
-CONSULTAS
- │
- ▼
-TOOLS
- │
- ▼
-SKILLS
- │
- ▼
-AGENTE
+```
+
+A validação verifica, entre outros aspectos:
+
+* Existência das colunas obrigatórias;
+* Registros vazios;
+* Valores numéricos;
+* Estrutura básica do arquivo.
+
+Essa camada foi criada pensando na futura substituição dos dados fictícios por dados operacionais estruturados.
+
+---
+
+# 🌐 Interface Web
+
+O projeto possui uma interface web desenvolvida com **Streamlit**.
+
+Principais arquivos:
+
+```text
+app/interface.py
+app/dashboard.py
+```
+
+A interface apresenta informações relacionadas às análises de:
+
+* Perdas;
+* Rotas;
+* Transportadoras;
+* Riscos.
+
+A arquitetura foi organizada para separar a interface da lógica do Dashboard.
+
+Fluxo:
+
+```text
+Interface
+   ↓
+Dashboard
+   ↓
+Agente / análises
+   ↓
+Dados
 ```
 
 ---
@@ -374,7 +547,9 @@ Utilizada para:
 * Processamento dos dados;
 * Regras de negócio;
 * Priorização de riscos;
-* Geração dos relatórios.
+* Geração de relatórios;
+* Integração com MCP;
+* Interface web.
 
 ---
 
@@ -382,73 +557,41 @@ Utilizada para:
 
 Banco de dados relacional utilizado para armazenar os dados da aplicação.
 
-Permite evoluir o projeto além da utilização direta de arquivos CSV.
-
 ---
 
 ## CSV
 
-Os arquivos CSV são utilizados como fonte de dados fictícios para a aplicação.
-
-Arquivos:
-
-```text
-dados/
-├── remessas.csv
-├── ocorrencias.csv
-├── rotas.csv
-└── transportadoras.csv
-```
+Utilizado como fonte de dados fictícios e também como mecanismo de entrada para testes de dados externos.
 
 ---
 
-## Python Virtual Environment — `.venv`
+## MCP — Model Context Protocol
 
-O projeto utiliza um ambiente virtual Python para isolamento do ambiente de desenvolvimento.
+Utilizado como camada de comunicação entre o Agente e as ferramentas responsáveis pelo acesso aos dados.
 
-```text
-.venv/
-```
+---
 
-Ativação no Windows PowerShell:
+## Streamlit
 
-```powershell
-.\.venv\Scripts\Activate.ps1
-```
+Utilizado para construção da interface web e do Dashboard.
 
 ---
 
 ## Visual Studio Code
 
-O projeto foi desenvolvido utilizando o **Visual Studio Code**.
-
-Recursos utilizados:
-
-* Editor de código;
-* Terminal integrado;
-* Organização dos arquivos;
-* Execução do Python;
-* Testes e validações;
-* Desenvolvimento incremental.
+Utilizado como ambiente principal de desenvolvimento.
 
 ---
 
 ## Git
 
-Utilizado para controle de versões.
-
-Permite:
-
-* Registrar alterações;
-* Criar histórico do desenvolvimento;
-* Recuperar versões anteriores;
-* Organizar a evolução do projeto.
+Utilizado para controle de versões e criação dos checkpoints do projeto.
 
 ---
 
 ## GitHub
 
-Utilizado como plataforma para versionamento e apresentação do projeto como portfólio profissional.
+Utilizado para armazenamento, versionamento e apresentação do projeto como portfólio profissional.
 
 ---
 
@@ -456,11 +599,20 @@ Utilizado como plataforma para versionamento e apresentação do projeto como po
 
 ```text
 APP-Prevencao-de-Perdas/
+
 │
 ├── app/
 │   │
 │   ├── agente.py
 │   ├── interpretador.py
+│   ├── interface.py
+│   ├── dashboard.py
+│   │
+│   ├── mcp/
+│   │   ├── __init__.py
+│   │   ├── servidor.py
+│   │   ├── cliente.py
+│   │   └── testar_cliente.py
 │   │
 │   ├── database/
 │   │   ├── conexao.py
@@ -478,7 +630,11 @@ APP-Prevencao-de-Perdas/
 │   │   └── priorizar_riscos.py
 │   │
 │   └── tools/
-│       └── dados.py
+│       ├── dados.py
+│       ├── ler_csv.py
+│       ├── validar_csv.py
+│       ├── normalizar_dados.py
+│       └── importar_externo.py
 │
 ├── dados/
 │   ├── remessas.csv
@@ -496,93 +652,56 @@ APP-Prevencao-de-Perdas/
 
 # 📊 Dados utilizados
 
-Os dados são fictícios e foram criados para simular uma operação de logística e e-commerce.
+Os dados são fictícios e simulam uma operação de logística e e-commerce.
 
-## Remessas
+## Base original
 
-Arquivo:
+A base original utilizada no projeto possui:
 
 ```text
-dados/remessas.csv
+30 remessas
+18 ocorrências
+4 rotas
+2 transportadoras
 ```
 
-Contém informações como:
-
-* ID da remessa;
-* Data;
-* Origem;
-* Destino;
-* Rota;
-* Transportadora;
-* Valor da mercadoria;
-* Status.
-
----
-
-## Ocorrências
-
-Arquivo:
+Valor original registrado nas ocorrências:
 
 ```text
-dados/ocorrencias.csv
+R$ 28.360,00
 ```
 
-Contém:
-
-* ID da ocorrência;
-* ID da remessa;
-* Data;
-* Tipo de ocorrência;
-* Rota;
-* Transportadora;
-* Valor da perda;
-* Status;
-* Descrição.
-
-Tipos utilizados:
+Tipos de ocorrência da base original:
 
 ```text
-EXTRAVIO
-AVARIA
-DIVERGENCIA
-FURTO
-DEVOLUCAO
+EXTRAVIO        6
+AVARIA          5
+DIVERGENCIA     3
+FURTO           2
+DEVOLUCAO       2
 ```
 
 ---
 
-## Rotas
+## Dados externos de teste
 
-Arquivo:
+Durante a evolução da V5, foram utilizados registros externos fictícios para validar o processo de importação.
 
-```text
-dados/rotas.csv
-```
-
-Contém:
-
-* ID da rota;
-* Origem;
-* Destino;
-* Distância;
-* Região.
-
----
-
-## Transportadoras
-
-Arquivo:
+Foram adicionadas 3 ocorrências de teste:
 
 ```text
-dados/transportadoras.csv
+3 registros externos
+R$ 3.550,00 em perdas
 ```
 
-Contém:
+Assim, o banco utilizado durante os testes da V5.6 passou a apresentar:
 
-* ID da transportadora;
-* Nome;
-* Tipo de operação;
-* Região.
+```text
+21 ocorrências
+R$ 31.910,00 em perdas registradas
+```
+
+Esses registros também são fictícios e fazem parte exclusivamente do ambiente demonstrativo do projeto.
 
 ---
 
@@ -608,7 +727,7 @@ Quantidade de ocorrências por:
 
 ### Média de perda por ocorrência
 
-Permite avaliar o impacto financeiro médio das ocorrências.
+Permite analisar o impacto financeiro médio das ocorrências.
 
 ### Classificação de risco
 
@@ -616,40 +735,9 @@ As rotas podem ser classificadas de acordo com os critérios definidos na lógic
 
 ---
 
-# 📌 Resultados dos dados utilizados
+# 💡 Exemplos de utilização
 
-A base fictícia atualmente utilizada possui:
-
-```text
-30 remessas
-18 ocorrências
-4 rotas
-2 transportadoras
-```
-
-Valor total registrado nas ocorrências:
-
-```text
-R$ 28.360,00
-```
-
-Tipos de ocorrência registrados:
-
-```text
-EXTRAVIO       6
-AVARIA         5
-DIVERGENCIA    3
-FURTO          2
-DEVOLUCAO      2
-```
-
-Os indicadores permitem analisar tanto a **frequência** quanto o **impacto financeiro** das ocorrências.
-
----
-
-# 💡 Exemplo de utilização
-
-Após iniciar o agente, o sistema apresenta:
+Após iniciar o agente:
 
 ```text
 === AGENTE DE PREVENÇÃO DE PERDAS ===
@@ -659,27 +747,29 @@ Digite uma pergunta para o agente.
 Digite 'sair' para encerrar.
 ```
 
-O usuário pode perguntar:
+O usuário pode realizar perguntas como:
 
 ```text
-Qual transportadora apresenta maior risco?
+Quais são as perdas?
 ```
-
-O agente interpreta a pergunta e direciona a solicitação para a Skill correspondente.
-
-Exemplo de resultado:
 
 ```text
-Análise das transportadoras:
-
-- RapLog: 10 ocorrências em 15 remessas;
-  índice de ocorrência de 66.67%;
-  perdas de R$ 15.730,00.
-
-- TransLog: 8 ocorrências em 15 remessas;
-  índice de ocorrência de 53.33%;
-  perdas de R$ 12.630,00.
+Quais são as rotas?
 ```
+
+```text
+Quais são as transportadoras?
+```
+
+```text
+Quais são as anomalias?
+```
+
+```text
+Quais são os riscos?
+```
+
+O Agente interpreta a pergunta, consulta os dados através do MCP e direciona os dados para a Skill correspondente.
 
 ---
 
@@ -691,7 +781,7 @@ Análise das transportadoras:
 git clone <URL_DO_REPOSITORIO>
 ```
 
-Depois entre na pasta:
+Depois:
 
 ```bash
 cd APP-Prevencao-de-Perdas
@@ -717,34 +807,32 @@ No Windows PowerShell:
 
 ---
 
-## 4. Executar o agente
-
-Com o ambiente virtual ativado:
+## 4. Executar o Agente
 
 ```powershell
 python -m app.agente
 ```
 
-> A execução com `python -m app.agente` é importante porque o projeto utiliza a estrutura de pacotes `app`, `app.skills`, `app.tools` e `app.database`.
+---
+
+## 5. Executar o Dashboard
+
+```powershell
+python -m streamlit run app\interface.py
+```
+
+A interface web será aberta pelo Streamlit no navegador.
 
 ---
 
-# 🧪 Testes realizados
+# 🧪 Validação da V5.6
 
-A aplicação foi validada progressivamente durante sua evolução.
+A integração MCP → Agente → Skills foi validada através de cinco perguntas principais.
 
-## Teste 1 — Transportadora
-
-Pergunta:
+### Teste 1 — Perdas
 
 ```text
-Qual transportadora apresenta maior risco?
-```
-
-Resultado:
-
-```text
-Análise das transportadoras
+Quais são as perdas?
 ```
 
 Status:
@@ -755,18 +843,10 @@ Status:
 
 ---
 
-## Teste 2 — Rota
-
-Pergunta:
+### Teste 2 — Rotas
 
 ```text
-Qual rota merece mais atenção?
-```
-
-Resultado:
-
-```text
-Priorização das rotas
+Quais são as rotas?
 ```
 
 Status:
@@ -777,18 +857,10 @@ Status:
 
 ---
 
-## Teste 3 — Relatório
-
-Pergunta:
+### Teste 3 — Transportadoras
 
 ```text
-Faça um relatório completo.
-```
-
-Resultado:
-
-```text
-RELATÓRIO DE PREVENÇÃO DE PERDAS
+Quais são as transportadoras?
 ```
 
 Status:
@@ -799,134 +871,31 @@ Status:
 
 ---
 
-# 🏗️ Evolução do projeto
-
-O projeto foi desenvolvido de forma incremental.
-
-## V1.0 — Agente básico
-
-Implementação inicial utilizando:
-
-* Python;
-* CSV;
-* Análises;
-* Skills;
-* Agente básico;
-* Geração de resultados.
-
----
-
-## V1.1 — Interpretação de linguagem natural
-
-Evolução da capacidade de interpretar diferentes formas de perguntas.
-
-Exemplos:
+### Teste 4 — Anomalias
 
 ```text
-Onde estão concentradas as perdas?
+Quais são as anomalias?
+```
 
-Qual rota merece mais atenção?
+Status:
 
-Qual transportadora apresenta maior risco?
-
-Existe algum comportamento anormal?
-
-Qual deveria ser minha prioridade de investigação?
+```text
+✅ APROVADO
 ```
 
 ---
 
-## V1.2 — Interpretação estruturada
-
-Implementação do:
+### Teste 5 — Riscos
 
 ```text
-app/interpretador.py
+Quais são os riscos?
 ```
 
-Responsável por identificar:
+Status:
 
 ```text
-INTENÇÃO
-ENTIDADE
+✅ APROVADO
 ```
-
-antes da execução da Skill.
-
-A versão foi validada com perguntas em linguagem natural.
-
----
-
-## V2 — Persistência com SQLite
-
-Evolução da arquitetura para utilização de banco de dados.
-
-Foi implementado:
-
-```text
-app/database/
-```
-
-com:
-
-* Conexão com SQLite;
-* Criação das tabelas;
-* Importação dos dados;
-* Validação do banco;
-* Consultas estruturadas.
-
-Banco:
-
-```text
-dados/prevencao_perdas.db
-```
-
----
-
-## V3 — Skills + Tools
-
-A arquitetura foi evoluída para separar a lógica de análise do acesso aos dados.
-
-Foi criada a camada:
-
-```text
-app/tools/
-```
-
-com a Tool:
-
-```text
-app/tools/dados.py
-```
-
-As Skills passaram a utilizar as Tools para obter os dados.
-
-Fluxo:
-
-```text
-AGENTE
-   ↓
-SKILL
-   ↓
-TOOL
-   ↓
-DATABASE
-   ↓
-SQLITE
-```
-
-As seis Skills foram validadas:
-
-```text
-✅ analisar_perdas
-✅ analisar_rotas
-✅ analisar_transportadoras
-✅ analisar_anomalias
-✅ priorizar_riscos
-✅ gerar_relatorio
-```
-
-Além disso, o agente completo foi testado novamente após a evolução arquitetural.
 
 ---
 
@@ -974,6 +943,242 @@ As informações produzidas pelo sistema não devem ser utilizadas isoladamente 
 
 ---
 
+# 🏗️ Evolução do projeto
+
+O projeto foi desenvolvido de forma incremental.
+
+## V1 — Agente e análises iniciais
+
+Implementação inicial utilizando:
+
+* Python;
+* CSV;
+* Análises;
+* Skills;
+* Agente básico;
+* Geração de resultados.
+
+---
+
+## V1.1 — Interpretação de linguagem natural
+
+Evolução da capacidade de interpretar diferentes formas de perguntas.
+
+---
+
+## V1.2 — Interpretação estruturada
+
+Implementação do:
+
+```text
+app/interpretador.py
+```
+
+Responsável por identificar:
+
+```text
+INTENÇÃO
+ENTIDADE
+```
+
+antes da execução da Skill.
+
+---
+
+## V2 — Persistência com SQLite
+
+Evolução da arquitetura para utilização de banco de dados.
+
+Foi implementado:
+
+```text
+app/database/
+```
+
+com:
+
+* Conexão com SQLite;
+* Criação das tabelas;
+* Importação dos dados;
+* Validação do banco;
+* Consultas estruturadas.
+
+---
+
+## V3 — Skills + Tools
+
+A arquitetura foi evoluída para separar a lógica de análise do acesso aos dados.
+
+Foi criada a camada:
+
+```text
+app/tools/
+```
+
+As Skills passaram a utilizar Tools para obtenção dos dados.
+
+Fluxo:
+
+```text
+AGENTE
+   ↓
+SKILL
+   ↓
+TOOL
+   ↓
+DATABASE
+   ↓
+SQLITE
+```
+
+---
+
+## V4.1 — Interface e Dashboard
+
+Foi criada uma interface web com Streamlit e o Dashboard foi separado da interface.
+
+Arquitetura:
+
+```text
+INTERFACE
+   ↓
+DASHBOARD
+   ↓
+ANÁLISES
+   ↓
+DADOS
+```
+
+A etapa foi validada com:
+
+```powershell
+python -m app.dashboard
+```
+
+e:
+
+```powershell
+python -m streamlit run app\interface.py
+```
+
+---
+
+## V5.5 — MCP, dados externos e Skills
+
+Foi implementada a primeira estrutura de MCP.
+
+Também foram adicionadas ferramentas para:
+
+* Leitura de CSV;
+* Validação de CSV;
+* Normalização de dados;
+* Importação de dados externos.
+
+Foi criado o MCP Server com ferramentas de consulta:
+
+```text
+consultar_ocorrencias()
+consultar_remessas()
+consultar_rotas()
+consultar_transportadoras()
+```
+
+As Skills foram adaptadas para receber dados externos mantendo compatibilidade com o funcionamento anterior.
+
+Checkpoint:
+
+```text
+v5.5
+```
+
+---
+
+## V5.6 — Integração MCP com o Agente
+
+Na V5.6, o MCP passou a participar efetivamente do fluxo de execução do Agente.
+
+Foi criado:
+
+```text
+app/mcp/cliente.py
+```
+
+O fluxo passou a ser:
+
+```text
+USUÁRIO
+   ↓
+AGENTE
+   ↓
+MCP CLIENT
+   ↓
+MCP SERVER
+   ↓
+TOOLS
+   ↓
+DADOS
+   ↓
+SKILLS
+   ↓
+RESULTADO
+```
+
+As cinco consultas principais foram validadas:
+
+```text
+✅ Quais são as perdas?
+✅ Quais são as rotas?
+✅ Quais são as transportadoras?
+✅ Quais são as anomalias?
+✅ Quais são os riscos?
+```
+
+Checkpoint:
+
+```text
+v5.6
+```
+
+Commit:
+
+```text
+157712d
+feat: integrate MCP with agent and skills
+```
+
+---
+
+# 📌 Checkpoints Git
+
+O projeto possui checkpoints versionados:
+
+```text
+v3.0
+│
+├── Skills + Tools
+│
+v4.1
+│
+├── Interface + Dashboard
+│
+v5.5
+│
+├── MCP + dados externos + Skills
+│
+└── v5.6
+    └── MCP integrado ao Agente
+```
+
+A branch de desenvolvimento atual é:
+
+```text
+v4-interface
+```
+
+A `main` permanece como referência do estágio V3, enquanto as evoluções posteriores estão organizadas na branch de desenvolvimento.
+
+---
+
 # 🎓 Conhecimentos aplicados
 
 O desenvolvimento deste projeto permitiu aplicar conhecimentos relacionados a:
@@ -985,6 +1190,7 @@ O desenvolvimento deste projeto permitiu aplicar conhecimentos relacionados a:
 * Importação de módulos;
 * Arquitetura de software;
 * Arquitetura de agentes;
+* Model Context Protocol (MCP);
 * Manipulação de arquivos CSV;
 * Banco de dados SQLite;
 * SQL;
@@ -1001,6 +1207,7 @@ O desenvolvimento deste projeto permitiu aplicar conhecimentos relacionados a:
 * E-commerce;
 * Gestão de riscos;
 * Priorização de investigações;
+* Streamlit;
 * Git;
 * GitHub;
 * VS Code;
@@ -1016,57 +1223,91 @@ A proposta demonstra a aplicação de tecnologia para:
 
 * Identificar padrões;
 * Apoiar auditorias;
-* Priorizar rotas;
+* Analisar rotas;
 * Avaliar indicadores de transportadoras;
 * Identificar pontos de atenção;
 * Apoiar investigações;
 * Automatizar análises;
 * Transformar dados operacionais em informações para tomada de decisão.
 
+O projeto também demonstra a evolução de conhecimentos de negócio para uma arquitetura de software composta por **Agente, Skills, Tools, MCP, banco de dados e interface web**.
+
 ---
 
-# 🔮 Próximas evoluções
+# 🔮 Encerramento e futuras evoluções
 
-A arquitetura atual permite futuras evoluções, como:
+A V5.6 representa um estágio funcional importante do projeto, com o MCP integrado efetivamente ao fluxo do Agente.
+
+A partir deste ponto, novas funcionalidades podem ser desenvolvidas futuramente, como:
 
 ```text
-V4
-└── Interface Web com Streamlit
-
-V5
-└── Integração com MCP
-
-V6
-└── Dashboard e alertas
-
-V7
-└── Integração com APIs externas
-
-V8
-└── Alertas e análises avançadas
+Integração com APIs externas
+        ↓
+Alertas automáticos
+        ↓
+Autenticação e controle de acesso
+        ↓
+Monitoramento de indicadores
+        ↓
+Integração com sistemas corporativos
 ```
 
-Essas funcionalidades **não fazem parte da V3 atual** e representam possibilidades de evolução do projeto.
+Essas funcionalidades não fazem parte do escopo atual do projeto.
+
+O objetivo da versão atual é demonstrar uma arquitetura funcional de **Agente Inteligente aplicado à Prevenção de Perdas**, utilizando dados estruturados, análise de indicadores, Skills, Tools, MCP e interface web.
 
 ---
 
 # 📌 Status do projeto
 
-**Versão atual: V3 — Skills + Tools**
+**Versão atual: V5.6 — MCP integrado ao Agente**
 
 ```text
 🟢 Projeto funcional
+
 🟢 Dados fictícios
+
 🟢 Interpretador implementado
+
 🟢 Agente implementado
+
 🟢 Skills implementadas
+
 🟢 Tools implementadas
+
 🟢 Banco SQLite implementado
+
 🟢 Camada de consultas implementada
-🟢 Relatório implementado
+
+🟢 Dados externos implementados
+
+🟢 Validação e normalização de CSV
+
+🟢 MCP Server implementado
+
+🟢 MCP Client implementado
+
+🟢 MCP integrado ao Agente
+
+🟢 Interface Web implementada
+
+🟢 Dashboard implementado
+
 🟢 Priorização de riscos implementada
+
+🟢 Análise de anomalias implementada
+
+🟢 Relatório implementado
+
 🟢 Testes das Skills aprovados
-🟢 Testes de integração do agente aprovados
+
+🟢 Testes de integração do Agente aprovados
+
+🟢 Cinco consultas principais validadas
+
+🟢 Checkpoint Git V5.6 criado
+
+🟢 Tag v5.6 publicada no GitHub
 ```
 
 ---
