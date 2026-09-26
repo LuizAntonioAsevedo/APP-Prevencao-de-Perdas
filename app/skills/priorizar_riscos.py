@@ -3,12 +3,19 @@ from collections import defaultdict
 from app.tools.dados import obter_remessas, obter_ocorrencias
 
 
-def carregar_remessas():
+def carregar_remessas(registros=None):
     """
-    Carrega as remessas utilizando a Tool de dados.
+    Carrega as remessas.
+
+    Quando registros são fornecidos, utiliza esses dados
+    diretamente.
+
+    Quando registros não são fornecidos, utiliza a Tool
+    de dados como comportamento de compatibilidade.
     """
 
-    registros = obter_remessas()
+    if registros is None:
+        registros = obter_remessas()
 
     remessas = []
 
@@ -27,12 +34,19 @@ def carregar_remessas():
     return remessas
 
 
-def carregar_ocorrencias():
+def carregar_ocorrencias(registros=None):
     """
-    Carrega as ocorrências utilizando a Tool de dados.
+    Carrega as ocorrências.
+
+    Quando registros são fornecidos, utiliza esses dados
+    diretamente.
+
+    Quando registros não são fornecidos, utiliza a Tool
+    de dados como comportamento de compatibilidade.
     """
 
-    registros = obter_ocorrencias()
+    if registros is None:
+        registros = obter_ocorrencias()
 
     ocorrencias = []
 
@@ -77,14 +91,21 @@ def classificar_risco(indice_ocorrencia, valor_perdas):
     return "BAIXO"
 
 
-def priorizar_riscos():
+def priorizar_riscos(
+    remessas=None,
+    ocorrencias=None
+):
     """
-    Prioriza os riscos das rotas utilizando os dados
-    fornecidos pelas Tools.
+    Prioriza os riscos das rotas.
+
+    Se os dados forem fornecidos, a Skill utiliza esses registros.
+
+    Caso contrário, mantém o comportamento anterior utilizando
+    as Tools de dados.
     """
 
-    remessas = carregar_remessas()
-    ocorrencias = carregar_ocorrencias()
+    remessas = carregar_remessas(remessas)
+    ocorrencias = carregar_ocorrencias(ocorrencias)
 
     remessas_por_rota = defaultdict(int)
     ocorrencias_por_rota = defaultdict(int)

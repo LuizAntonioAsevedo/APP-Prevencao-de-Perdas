@@ -1,4 +1,5 @@
 from app.interpretador import interpretar_pergunta
+from app.mcp.cliente import consultar_dados_mcp
 
 from app.skills.analisar_perdas import analisar_perdas
 from app.skills.analisar_rotas import analisar_rotas
@@ -35,32 +36,36 @@ def formatar_perdas(resultado):
     )
 
     linhas.append("")
-
     linhas.append("Ocorrências por tipo:")
 
     for tipo, quantidade in resultado["ocorrencias_por_tipo"].items():
-        linhas.append(f"- {tipo}: {quantidade}")
+        linhas.append(
+            f"- {tipo}: {quantidade}"
+        )
 
     linhas.append("")
-
     linhas.append("Impacto financeiro por tipo:")
 
     for tipo, valor in resultado["perdas_por_tipo"].items():
-        linhas.append(f"- {tipo}: {formatar_moeda(valor)}")
+        linhas.append(
+            f"- {tipo}: {formatar_moeda(valor)}"
+        )
 
     linhas.append("")
 
     tipo_frequente = resultado["tipo_mais_frequente"]
 
     linhas.append(
-        f"Tipo mais frequente: {tipo_frequente[0]} "
+        f"Tipo mais frequente: "
+        f"{tipo_frequente[0]} "
         f"({tipo_frequente[1]} ocorrências)."
     )
 
     tipo_maior_perda = resultado["tipo_maior_perda"]
 
     linhas.append(
-        f"Maior impacto financeiro: {tipo_maior_perda[0]} "
+        f"Maior impacto financeiro: "
+        f"{tipo_maior_perda[0]} "
         f"({formatar_moeda(tipo_maior_perda[1])})."
     )
 
@@ -75,16 +80,16 @@ def formatar_perdas(resultado):
 
 
 def formatar_rotas(resultado):
-    linhas = []
-
-    linhas.append("ANÁLISE DAS ROTAS")
-    linhas.append("")
+    linhas = [
+        "ANÁLISE DAS ROTAS",
+        ""
+    ]
 
     for rota in resultado:
         linhas.append(
             f"Rota {rota['rota']}: "
-            f"{rota['ocorrencias']} ocorrências em "
-            f"{rota['remessas']} remessas."
+            f"{rota['ocorrencias']} ocorrências "
+            f"em {rota['remessas']} remessas."
         )
 
         linhas.append(
@@ -106,12 +111,14 @@ def formatar_riscos(resultado):
     linhas = []
 
     riscos_criticos = [
-        item for item in resultado
+        item
+        for item in resultado
         if item["risco"] == "CRÍTICO"
     ]
 
     riscos_altos = [
-        item for item in resultado
+        item
+        for item in resultado
         if item["risco"] == "ALTO"
     ]
 
@@ -133,11 +140,11 @@ def formatar_riscos(resultado):
     )
 
     linhas.append("")
-
     linhas.append("CLASSIFICAÇÃO DAS ROTAS")
     linhas.append("")
 
     for item in resultado:
+
         linhas.append(
             f"Rota: {item['rota']}"
         )
@@ -163,14 +170,16 @@ def formatar_riscos(resultado):
         linhas.append("")
 
     if resultado:
+
         principal = resultado[0]
 
         linhas.append("PONTO DE ATENÇÃO")
         linhas.append("")
 
         linhas.append(
-            f"A rota {principal['rota']} foi classificada como "
-            f"risco {principal['risco']}."
+            f"A rota {principal['rota']} "
+            f"foi classificada como risco "
+            f"{principal['risco']}."
         )
 
         linhas.append(
@@ -200,18 +209,21 @@ def formatar_riscos(resultado):
 
 
 def formatar_transportadoras(resultado):
-    linhas = []
-
-    linhas.append("ANÁLISE DAS TRANSPORTADORAS")
-    linhas.append("")
+    linhas = [
+        "ANÁLISE DAS TRANSPORTADORAS",
+        ""
+    ]
 
     for transportadora in resultado:
+
         linhas.append(
-            f"Transportadora: {transportadora['transportadora']}"
+            f"Transportadora: "
+            f"{transportadora['transportadora']}"
         )
 
         linhas.append(
-            f"Ocorrências: {transportadora['ocorrencias']} "
+            f"Ocorrências: "
+            f"{transportadora['ocorrencias']} "
             f"em {transportadora['remessas']} remessas."
         )
 
@@ -236,42 +248,52 @@ def formatar_transportadoras(resultado):
 
 
 def formatar_anomalias(resultado):
-    linhas = []
-
-    linhas.append("PONTOS DE ATENÇÃO IDENTIFICADOS")
+    linhas = [
+        "PONTOS DE ATENÇÃO IDENTIFICADOS"
+    ]
 
     if resultado["rotas"]:
+
         linhas.append("")
         linhas.append("ROTAS")
 
         for rota in resultado["rotas"]:
+
             linhas.append(
-                f"- {rota['rota']}: nível {rota['nivel']}, "
+                f"- {rota['rota']}: "
+                f"nível {rota['nivel']}, "
                 f"índice de ocorrência de "
-                f"{rota['indice_ocorrencia']:.2f}% e "
-                f"perdas de "
+                f"{rota['indice_ocorrencia']:.2f}% "
+                f"e perdas de "
                 f"{formatar_moeda(rota['valor_perdas'])}."
             )
+
     else:
+
         linhas.append(
             "- Nenhum ponto de atenção identificado nas rotas."
         )
 
     if resultado["transportadoras"]:
+
         linhas.append("")
         linhas.append("TRANSPORTADORAS")
 
         for transportadora in resultado["transportadoras"]:
+
             linhas.append(
                 f"- {transportadora['transportadora']}: "
                 f"nível {transportadora['nivel']}, "
-                f"{transportadora['ocorrencias']} ocorrências e "
-                f"perdas de "
+                f"{transportadora['ocorrencias']} ocorrências "
+                f"e perdas de "
                 f"{formatar_moeda(transportadora['valor_perdas'])}."
             )
+
     else:
+
         linhas.append(
-            "- Nenhum ponto de atenção identificado nas transportadoras."
+            "- Nenhum ponto de atenção identificado "
+            "nas transportadoras."
         )
 
     linhas.append("")
@@ -286,6 +308,7 @@ def formatar_anomalias(resultado):
 
 
 def formatar_resposta(resultado):
+
     if isinstance(resultado, str):
         return resultado
 
@@ -325,24 +348,28 @@ def formatar_resposta(resultado):
     return str(resultado)
 
 
-# ==========================================================
-# DADOS PARA O DASHBOARD
-# ==========================================================
-
 def obter_dados_dashboard():
-    """
-    Retorna os principais indicadores utilizados
-    pelo dashboard da aplicação.
+    dados = consultar_dados_mcp()
 
-    A interface não precisa conhecer diretamente
-    as Skills. O agente funciona como camada de
-    orquestração entre a interface e as Skills.
-    """
+    remessas = dados["remessas"]
+    ocorrencias = dados["ocorrencias"]
 
-    perdas = analisar_perdas()
-    rotas = analisar_rotas()
-    transportadoras = analisar_transportadoras()
-    riscos = priorizar_riscos()
+    perdas = analisar_perdas(ocorrencias)
+
+    rotas = analisar_rotas(
+        remessas,
+        ocorrencias
+    )
+
+    transportadoras = analisar_transportadoras(
+        remessas,
+        ocorrencias
+    )
+
+    riscos = priorizar_riscos(
+        remessas,
+        ocorrencias
+    )
 
     return {
         "perdas": perdas,
@@ -352,82 +379,72 @@ def obter_dados_dashboard():
     }
 
 
-# ==========================================================
-# EXECUÇÃO DO AGENTE
-# ==========================================================
-
 def executar_agente(pergunta):
+
     interpretacao = interpretar_pergunta(pergunta)
 
     intencao = interpretacao["intencao"]
     entidade = interpretacao["entidade"]
 
-    # ======================================================
-    # RELATÓRIO
-    # ======================================================
-
     if intencao == "relatorio":
         return gerar_relatorio()
 
-    # ======================================================
-    # ANÁLISE DE ANOMALIAS
-    # ======================================================
+    # ==========================================================
+    # V5.6 — CONSULTA DOS DADOS ATRAVÉS DO MCP
+    # ==========================================================
+
+    dados = consultar_dados_mcp()
+
+    remessas = dados["remessas"]
+    ocorrencias = dados["ocorrencias"]
+
+    # ==========================================================
+    # EXECUÇÃO DAS SKILLS UTILIZANDO OS DADOS DO MCP
+    # ==========================================================
 
     if intencao == "analisar_anomalias":
-        return analisar_anomalias()
-
-    # ======================================================
-    # PRIORIZAÇÃO DE TRANSPORTADORAS
-    # ======================================================
+        return analisar_anomalias(
+            remessas,
+            ocorrencias
+        )
 
     if intencao == "priorizar" and entidade == "transportadora":
-        return analisar_transportadoras()
-
-    # ======================================================
-    # ANÁLISE DE TRANSPORTADORAS
-    # ======================================================
+        return analisar_transportadoras(
+            remessas,
+            ocorrencias
+        )
 
     if intencao == "analisar" and entidade == "transportadora":
-        return analisar_transportadoras()
-
-    # ======================================================
-    # PRIORIZAÇÃO DE ROTAS
-    # ======================================================
+        return analisar_transportadoras(
+            remessas,
+            ocorrencias
+        )
 
     if intencao == "priorizar" and entidade == "rota":
-        return priorizar_riscos()
-
-    # ======================================================
-    # ANÁLISE DE ROTAS
-    # ======================================================
+        return priorizar_riscos(
+            remessas,
+            ocorrencias
+        )
 
     if intencao == "analisar" and entidade == "rota":
-        return analisar_rotas()
-
-    # ======================================================
-    # PRIORIZAÇÃO GERAL
-    # ======================================================
+        return analisar_rotas(
+            remessas,
+            ocorrencias
+        )
 
     if intencao == "priorizar":
-        return priorizar_riscos()
-
-    # ======================================================
-    # ANÁLISE DE PERDAS
-    # ======================================================
+        return priorizar_riscos(
+            remessas,
+            ocorrencias
+        )
 
     if intencao == "analisar" and entidade == "perdas":
-        return analisar_perdas()
-
-    # ======================================================
-    # PERGUNTA NÃO IDENTIFICADA
-    # ======================================================
+        return analisar_perdas(
+            ocorrencias
+        )
 
     return None
 
-
-# ==========================================================
-# EXECUÇÃO DIRETA PELO TERMINAL
-# ==========================================================
 
 if __name__ == "__main__":
 
@@ -454,13 +471,13 @@ if __name__ == "__main__":
         if resultado is None:
 
             print(
-                "Agente: Não consegui identificar qual análise "
-                "devo executar."
+                "Agente: Não consegui identificar "
+                "qual análise devo executar."
             )
 
             print(
-                "Tente perguntar sobre perdas, rotas, riscos, "
-                "transportadoras, anomalias ou relatório."
+                "Tente perguntar sobre perdas, rotas, "
+                "riscos, transportadoras, anomalias ou relatório."
             )
 
         else:

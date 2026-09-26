@@ -3,12 +3,19 @@ from collections import Counter
 from app.tools.dados import obter_ocorrencias
 
 
-def carregar_ocorrencias():
+def carregar_ocorrencias(registros=None):
     """
-    Carrega as ocorrências utilizando a Tool de dados.
+    Carrega as ocorrências.
+
+    Quando registros são fornecidos, utiliza esses dados
+    diretamente.
+
+    Quando registros não são fornecidos, utiliza a Tool
+    de dados como comportamento de compatibilidade.
     """
 
-    registros = obter_ocorrencias()
+    if registros is None:
+        registros = obter_ocorrencias()
 
     ocorrencias = []
 
@@ -28,12 +35,16 @@ def carregar_ocorrencias():
     return ocorrencias
 
 
-def analisar_perdas():
+def analisar_perdas(registros=None):
     """
-    Analisa as perdas utilizando os dados fornecidos pela Tool.
+    Analisa as perdas utilizando os dados fornecidos.
+
+    Se registros forem fornecidos, a Skill utiliza esses dados.
+    Caso contrário, mantém o comportamento anterior utilizando
+    a Tool de dados.
     """
 
-    ocorrencias = carregar_ocorrencias()
+    ocorrencias = carregar_ocorrencias(registros)
 
     total_ocorrencias = len(ocorrencias)
 
